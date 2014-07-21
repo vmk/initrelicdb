@@ -95,6 +95,18 @@ public class InitRelicDB {
 					System.out.println("\t " + p.getKey() + ": " + getProperty(p));
 				}
 				System.out.println("-------------------------------------------------------------------------------");
+				if(optionsInEffect.has(optionParser.clean)){
+					MongoStore ms;
+					System.out.println("Cleaning database...");
+					if (Boolean.parseBoolean(getProperty(PropertyKeys.AUTH))) {
+						ms = new MongoStore(getProperty(PropertyKeys.HOST), Integer.parseInt(getProperty(PropertyKeys.PORT)), getProperty(PropertyKeys.DBNAME), "relics", getProperty(PropertyKeys.USER), getProperty(PropertyKeys.PASS));
+						ms.clearRelicDB();
+					} else {
+						ms = new MongoStore(getProperty(PropertyKeys.HOST), Integer.parseInt(getProperty(PropertyKeys.PORT)), getProperty(PropertyKeys.DBNAME), "relics");
+						ms.clearRelicDB();
+					}
+					System.out.println("-------------------------------------------------------------------------------");
+				}
 				File listFile = optionsInEffect.valueOf(optionParser.relicListFile);
 				System.out.println("Using " + listFile.getAbsolutePath() + " as input...");
 				ArrayList<CsvEntry> listEntries = CsvParser.parse(listFile, getProperty(PropertyKeys.SEPARATOR).charAt(0));
